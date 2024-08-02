@@ -10,7 +10,6 @@ const initialState = {
   age: "",
   gender: "",
   budget: "",
-  isActive: "",
 };
 
 const Form = ({ close }) => {
@@ -47,7 +46,6 @@ const Form = ({ close }) => {
           placeholder="FirstName"
         />
         <input
-          required
           onChange={handleChange}
           name="lname"
           type="text"
@@ -63,6 +61,7 @@ const Form = ({ close }) => {
         <input
           required
           onChange={handleChange}
+          minLength={8}
           name="password"
           type="password"
           placeholder="Password"
@@ -76,8 +75,8 @@ const Form = ({ close }) => {
         />
         <select required onChange={handleChange} name="gender" id="">
           <option value="">Gender</option>
-          <option value="">Male</option>
-          <option value="">Female</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
         </select>
         <input
           required
@@ -86,12 +85,10 @@ const Form = ({ close }) => {
           type="number"
           placeholder="Budget"
         />
-        <select required onChange={handleChange} name="isActive" id="">
-          <option value="">isActive</option>
-          <option value="true">Active</option>
-          <option value="false">InActive</option>
-        </select>
-        <button>{isLoading ? "Loading..." : "Create"}</button>
+        <div className="form__btns">
+          <button>cancel</button>
+          <button>{isLoading ? "Loading..." : "Create"}</button>
+        </div>
       </form>
     </>
   );

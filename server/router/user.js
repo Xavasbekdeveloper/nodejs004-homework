@@ -1,10 +1,14 @@
 import express from "express";
-import { User } from "../schema/userSchema.js";
+import { User, validationUser } from "../schema/userSchema.js";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const user = await User.find();
+    const { limit = 4, skip = 1 } = req.query;
+
+    const user = await User.find()
+      .limit(limit)
+      .skip((skip - 1) * limit);
     if (!user.length) {
       return res.status(400).json({
         msg: "Users is not defined",
@@ -13,11 +17,12 @@ router.get("/", async (req, res) => {
       });
     }
 
+    const total = await User.countDocuments();
     res.status(200).json({
       msg: "All Users",
       variant: "success",
       payload: user,
-      total: user.length,
+      total,
     });
   } catch {
     res.status(500).json({
@@ -30,6 +35,14 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
+    const { error } = validationUser(req.body);
+    if (error) {
+      return res.status(400).json({
+        msg: error.details[0].message,
+        variant: "error",
+        payload: null,
+      });
+    }
     const existUser = await User.exists({ username: req.body.username });
 
     if (existUser) {
