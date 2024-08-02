@@ -86,7 +86,9 @@ const Form = ({ close }) => {
           placeholder="Budget"
         />
         <div className="form__btns">
-          <button>cancel</button>
+          <button type="button" onClick={() => close(false)}>
+            cancel
+          </button>
           <button>{isLoading ? "Loading..." : "Create"}</button>
         </div>
       </form>
